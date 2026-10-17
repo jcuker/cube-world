@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CUBE WORLD™ Simulator — Stick People Sticking Together</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header / Hardware Control Bar -->
+    <header class="top-bar">
+      <div class="brand-group">
+        <div class="logo-badge">
+          <span class="logo-cube-icon">▣</span>
+          <div class="logo-text">
+            <h1>CUBE WORLD<span class="tm">™</span></h1>
+            <p class="slogan">STICK PEOPLE STICKING TOGETHER • 2005–2008 SIMULATOR</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gyroscope & World Controls -->
+      <div class="hardware-controls">
+        <div class="control-group" title="Simulate the built-in hardware gyroscope tilt sensor">
+          <span class="control-label">GYRO TILT</span>
+          <div class="btn-segmented" id="gyro-controls">
+            <button class="hw-btn" data-tilt="-90" title="Tilt Left (-90°)">⟲ Left</button>
+            <button class="hw-btn active" data-tilt="0" title="Normal Upright (0°)">▲ Upright</button>
+            <button class="hw-btn" data-tilt="90" title="Tilt Right (+90°)">⟳ Right</button>
+            <button class="hw-btn" data-tilt="180" title="Flip Upside Down (180°)">▼ Flip</button>
+          </div>
+          <button class="hw-btn accent-shake" id="btn-shake" title="Shake all cubes!">⚡ Shake</button>
+        </div>
+
+        <div class="control-group">
+          <span class="control-label">PRESETS</span>
+          <select id="preset-select" class="hw-select" aria-label="Load Preset Layout">
+            <option value="">Load Layout...</option>
+            <option value="starter">Series 1 Classic Quad</option>
+            <option value="blockparty">Block Bash Mega-Party (Mixed Sizes)</option>
+            <option value="tower">High-Rise Stick Tower</option>
+            <option value="modlab">Mod Madness Lab</option>
+            <option value="resort">Global Getaways Resort</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <span class="control-label">DRAG MODE</span>
+          <button class="hw-btn" id="btn-drag-mode" title="Toggle between dragging a single cube or moving a snapped cluster together">
+            Single Cube
+          </button>
+        </div>
+
+        <div class="control-group">
+          <button class="hw-btn active" id="btn-sound" title="Toggle Piezo Buzzer Audio">🔊 Piezo</button>
+          <button class="hw-btn" id="btn-translucent" title="Toggle Special Edition Clear Plastic Shells">💎 Clear Shell</button>
+          <button class="hw-btn danger" id="btn-clear" title="Remove all cubes from world">✕ Clear</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-workspace">
+      <!-- Left Panel: Draggable Cube Catalog -->
+      <aside class="catalog-panel">
+        <div class="panel-header">
+          <div class="panel-title-row">
+            <h2>CUBE CATALOG</h2>
+            <span class="cube-count-pill" id="world-stats-pill">0 / 16 Cubes</span>
+          </div>
+          <p class="panel-subtitle">Drag cubes into the 2D world or click to spawn. Snap magnetic edges together!</p>
+          <div class="filter-tabs" id="catalog-filters">
+            <button class="filter-tab active" data-filter="all">All (15)</button>
+            <button class="filter-tab" data-filter="1x1">1×1 Standard</button>
+            <button class="filter-tab" data-filter="mod">1×1 Mods</button>
+            <button class="filter-tab" data-filter="jumbo">Multi-Size (2×1, 1×2, 2×2)</button>
+          </div>
+        </div>
+
+        <div class="catalog-list" id="catalog-list">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </aside>
+
+      <!-- Center 2D World Canvas / Desk -->
+      <main class="world-viewport" id="world-viewport">
+        <!-- Background Grid & Instructions Overlay -->
+        <div class="world-stage" id="world-stage">
+          <svg class="connection-overlay" id="connection-overlay"></svg>
+          <div class="snap-preview" id="snap-preview" hidden></div>
+          <div class="cubes-container" id="cubes-container"></div>
+        </div>
+
+        <!-- Floating HUD: Live Event Feed & Controls Help -->
+        <div class="world-hud-bottom">
+          <div class="live-feed" id="live-feed">
+            <span class="feed-dot"></span>
+            <span class="feed-text" id="feed-text">Drag cubes from the left panel and snap their magnets together!</span>
+          </div>
+
+          <div class="zoom-controls">
+            <button class="hud-icon-btn" id="btn-CallHome" title="Send all visiting stickmen back to their home cubes">🏠 All Home</button>
+            <button class="hud-icon-btn" id="btn-Party" title="Trigger a cross-cube social gathering!">🎉 Trigger Visit</button>
+            <span class="hud-divider"></span>
+            <button class="hud-icon-btn" id="btn-zoom-out" title="Zoom Out">−</button>
+            <span class="zoom-readout" id="zoom-readout">100%</span>
+            <button class="hud-icon-btn" id="btn-zoom-in" title="Zoom In">+</button>
+            <button class="hud-icon-btn" id="btn-zoom-reset" title="Center View">⌖</button>
+          </div>
+        </div>
+
+        <!-- Selected Cube Mini-Inspector / Tooltip -->
+        <div class="cube-inspector" id="cube-inspector" hidden>
+          <div class="inspector-header">
+            <span class="inspector-badge" id="insp-series">SERIES 1</span>
+            <strong id="insp-name">SCOOP</strong>
+            <span class="inspector-size" id="insp-size">1×1</span>
+            <button class="inspector-close" id="insp-close" title="Close">✕</button>
+          </div>
+          <p class="inspector-desc" id="insp-desc"></p>
+          <div class="inspector-stats">
+            <div><span>Occupants:</span> <strong id="insp-occupants">1 / 4</strong></div>
+            <div><span>Connected Neighbors:</span> <strong id="insp-neighbors">0</strong></div>
+            <div><span>Current State:</span> <strong id="insp-state">Idle</strong></div>
+          </div>
+          <div class="inspector-actions">
+            <button class="insp-btn" id="insp-btn-trick">★ Perform Trick</button>
+            <button class="insp-btn" id="insp-btn-visit">➔ Visit Neighbor</button>
+            <button class="insp-btn" id="insp-btn-game">🎮 Mini-Game</button>
+            <button class="insp-btn danger" id="insp-btn-remove">🗑 Remove Cube</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Ghost element shown while dragging from catalog -->
+    <div id="catalog-drag-ghost" class="catalog-drag-ghost" hidden></div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/simulation.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

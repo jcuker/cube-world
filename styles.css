@@ -1,0 +1,919 @@
+:root {
+  --bg-dark: #11141a;
+  --bg-panel: #191d26;
+  --bg-card: #222834;
+  --bg-card-hover: #2b3342;
+  --border-subtle: rgba(255, 255, 255, 0.09);
+  --border-highlight: rgba(255, 255, 255, 0.2);
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --accent: #f59e0b;
+  --accent-glow: rgba(245, 158, 11, 0.35);
+  --snap-cyan: #38bdf8;
+  --lcd-bg: #9cad84;
+  --lcd-bg-lit: #a8ba8e;
+  --lcd-pixel: #1b2217;
+  --unit-px: 148px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ================= TOP HARDWARE BAR ================= */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: linear-gradient(180deg, #212631 0%, #161a22 100%);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  z-index: 30;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.logo-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-cube-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff;
+  font-size: 22px;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 2px rgba(255,255,255,0.35), 0 2px 8px rgba(249,115,22,0.4);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+.logo-text h1 {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.logo-text .tm {
+  font-size: 11px;
+  vertical-align: super;
+  color: var(--accent);
+}
+
+.logo-text .slogan {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+
+.hardware-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+}
+
+.control-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-right: 2px;
+  letter-spacing: 0.05em;
+}
+
+.btn-segmented {
+  display: flex;
+  background: #12151c;
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.hw-btn {
+  background: #262c3a;
+  color: #dbe4f0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.14s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.hw-btn:hover {
+  background: #323a4d;
+  color: #fff;
+}
+
+.hw-btn.active {
+  background: var(--accent);
+  color: #111;
+  border-color: #fbbf24;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.hw-btn.accent-shake {
+  background: #3b2d54;
+  border-color: #8b5cf6;
+  color: #ede9fe;
+}
+.hw-btn.accent-shake:hover {
+  background: #5b21b6;
+}
+
+.hw-btn.danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+.hw-btn.danger:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+.hw-select {
+  background: #262c3a;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ================= MAIN WORKSPACE ================= */
+.main-workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+/* ================= LEFT CATALOG PANEL ================= */
+.catalog-panel {
+  width: 330px;
+  min-width: 330px;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.35);
+}
+
+.panel-header {
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.panel-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-title-row h2 {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.cube-count-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.panel-subtitle {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.filter-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.filter-tab {
+  background: #12161f;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  padding: 5px 6px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-tab:hover {
+  color: #fff;
+  background: #1e2433;
+}
+
+.filter-tab.active {
+  background: #283147;
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.catalog-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.catalog-list::-webkit-scrollbar {
+  width: 6px;
+}
+.catalog-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+/* Catalog Card */
+.catalog-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  cursor: grab;
+  transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+  position: relative;
+}
+
+.catalog-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.catalog-card:active {
+  cursor: grabbing;
+}
+
+/* Mini Cube Preview Icon in Catalog */
+.card-mini-cube {
+  flex-shrink: 0;
+  width: 58px;
+  height: 58px;
+  border-radius: 9px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.35),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.45),
+    0 3px 8px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.card-mini-cube.size-2x1 {
+  width: 68px;
+  height: 44px;
+}
+.card-mini-cube.size-1x2 {
+  width: 44px;
+  height: 66px;
+}
+.card-mini-cube.size-2x2 {
+  width: 66px;
+  height: 66px;
+  border-radius: 11px;
+}
+
+.card-mini-screen {
+  width: 100%;
+  flex: 1;
+  background: var(--lcd-bg);
+  border-radius: 3px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: var(--lcd-pixel);
+}
+
+.card-mini-btns {
+  display: flex;
+  gap: 3px;
+  margin-top: 3px;
+}
+.card-mini-btns span {
+  width: 6px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-header-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.card-name {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+
+.card-badge-size {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.card-badge-size.jumbo {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.card-badge-series {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.card-role {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-top: 2px;
+}
+
+.card-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* ================= 2D WORLD VIEWPORT ================= */
+.world-viewport {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-color: #0d1017;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px, 148px 148px, 148px 148px;
+  cursor: grab;
+}
+
+.world-viewport.panning {
+  cursor: grabbing;
+}
+
+.world-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4000px;
+  height: 3000px;
+  transform-origin: 0 0;
+}
+
+.connection-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.cubes-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+/* Snap Ghost Preview in World */
+.snap-preview {
+  position: absolute;
+  border: 2.5px dashed var(--snap-cyan);
+  background: rgba(56, 189, 248, 0.14);
+  border-radius: 14px;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.35), inset 0 0 14px rgba(56, 189, 248, 0.2);
+  pointer-events: none;
+  z-index: 8;
+  transition: left 0.06s ease-out, top 0.06s ease-out, width 0.06s, height 0.06s;
+}
+
+.snap-preview.snapped-glow {
+  border-style: solid;
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.18);
+  box-shadow: 0 0 28px rgba(74, 222, 128, 0.55), inset 0 0 16px rgba(74, 222, 128, 0.25);
+}
+
+/* ================= PHYSICAL CUBE UNIT IN 2D WORLD ================= */
+.cube-unit {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  padding: 13px 13px 10px 13px;
+  border-radius: 13px;
+  cursor: grab;
+  box-shadow:
+    inset 0 3px 5px rgba(255, 255, 255, 0.38),
+    inset 0 -5px 8px rgba(0, 0, 0, 0.55),
+    0 12px 26px rgba(0, 0, 0, 0.65);
+  border: 2.5px solid rgba(0, 0, 0, 0.55);
+  transition: box-shadow 0.15s ease;
+  z-index: 10;
+}
+
+/* Translucent Special Edition Shell ("Clear Craze") */
+body.translucent-shells .cube-unit {
+  backdrop-filter: blur(4px);
+  background-blend-mode: hard-light;
+  box-shadow:
+    inset 0 0 14px rgba(255, 255, 255, 0.45),
+    inset 0 3px 6px rgba(255, 255, 255, 0.65),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.45),
+    0 10px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Internal PCB circuit traces visible in Clear Shell mode */
+body.translucent-shells .cube-unit::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px dashed rgba(255, 255, 255, 0.28);
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+.cube-unit:hover {
+  z-index: 14;
+}
+
+.cube-unit.selected {
+  outline: 2.5px solid #fbbf24;
+  outline-offset: 2px;
+  z-index: 15;
+}
+
+.cube-unit.dragging {
+  cursor: grabbing;
+  z-index: 25 !important;
+  box-shadow:
+    inset 0 3px 5px rgba(255, 255, 255, 0.45),
+    inset 0 -5px 8px rgba(0, 0, 0, 0.55),
+    0 22px 44px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(56, 189, 248, 0.35);
+}
+
+.cube-unit.snap-flash {
+  animation: snapPulse 0.42s ease-out;
+}
+
+@keyframes snapPulse {
+  0% { filter: brightness(1.45); transform: scale(1.03); }
+  50% { filter: brightness(1.15); transform: scale(0.99); }
+  100% { filter: brightness(1); transform: scale(1); }
+}
+
+/* Top Brand/Character Bezel Strip */
+.cube-top-bezel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  padding: 0 3px;
+  height: 13px;
+}
+
+.cube-bezel-label {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+  text-transform: uppercase;
+}
+
+.cube-bezel-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.65);
+  background: rgba(255, 255, 255, 0.55);
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+/* Recessed LCD Frame */
+.cube-screen-well {
+  flex: 1;
+  background: #272d22;
+  padding: 4px;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.85),
+    0 1px 1px rgba(255, 255, 255, 0.3);
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.cube-lcd-canvas {
+  width: 100%;
+  height: 100%;
+  background: var(--lcd-bg);
+  border-radius: 3px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+/* Subtle LCD Pixel Matrix Texture Overlay */
+.cube-screen-well::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 3px 3px;
+  border-radius: 3px;
+}
+
+/* Bottom Physical Control Buttons on Cube */
+.cube-bottom-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 18px;
+  margin-top: 5px;
+}
+
+.cube-hw-button {
+  width: 20px;
+  height: 9px;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #4b5563 0%, #1f2937 100%);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: transform 0.08s;
+}
+
+.cube-hw-button.action-btn {
+  width: 24px;
+  height: 10px;
+  background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%);
+}
+
+.cube-hw-button:hover {
+  filter: brightness(1.25);
+}
+
+.cube-hw-button:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+}
+
+/* Metallic Magnetic Contacts around Cube Perimeter */
+.magnet-pin {
+  position: absolute;
+  background: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  border-radius: 2px;
+  pointer-events: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+/* Connected Magnet Pin Glow */
+.magnet-pin.connected {
+  background: linear-gradient(135deg, #fde047 0%, #22c55e 100%);
+  box-shadow: 0 0 8px #4ade80, 0 0 3px #fef08a;
+  border-color: #15803d;
+}
+
+/* North / South pins */
+.magnet-pin.edge-n,
+.magnet-pin.edge-s {
+  width: 24px;
+  height: 4px;
+}
+.magnet-pin.edge-n { top: -3px; }
+.magnet-pin.edge-s { bottom: -3px; }
+
+/* West / East pins */
+.magnet-pin.edge-w,
+.magnet-pin.edge-e {
+  width: 4px;
+  height: 24px;
+}
+.magnet-pin.edge-w { left: -3px; }
+.magnet-pin.edge-e { right: -3px; }
+
+/* ================= HUD & INSPECTOR ================= */
+.world-hud-bottom {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 22;
+  gap: 12px;
+}
+
+.live-feed {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 20, 28, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-highlight);
+  padding: 8px 14px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  max-width: 560px;
+}
+
+.feed-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+  animation: pulseDot 1.6s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.feed-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zoom-controls {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 20, 28, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-highlight);
+  padding: 5px 10px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.hud-icon-btn {
+  background: #242b3a;
+  color: #f1f5f9;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.hud-icon-btn:hover {
+  background: #333d52;
+}
+
+.hud-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 2px;
+}
+
+.zoom-readout {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 42px;
+  text-align: center;
+}
+
+/* Selected Cube Inspector Card */
+.cube-inspector {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 280px;
+  background: rgba(20, 25, 35, 0.94);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-highlight);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+  z-index: 25;
+}
+
+.inspector-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inspector-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.inspector-header strong {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 16px;
+  color: #fff;
+  flex: 1;
+}
+
+.inspector-size {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #38bdf8;
+}
+
+.inspector-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+}
+.inspector-close:hover {
+  color: #fff;
+}
+
+.inspector-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.inspector-stats {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.inspector-stats div {
+  display: flex;
+  justify-content: space-between;
+}
+.inspector-stats span {
+  color: var(--text-muted);
+}
+
+.inspector-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.insp-btn {
+  background: #273042;
+  color: #f1f5f9;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+.insp-btn:hover {
+  background: #354159;
+}
+.insp-btn.danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+.insp-btn.danger:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+/* Drag Ghost from Catalog */
+.catalog-drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.9;
+  transform: translate(-50%, -50%) scale(0.95);
+}
